@@ -88,5 +88,75 @@ Execute the actions proposed in a Terraform plan
 terraform apply "gl-final"
 ```
 
-### deploy k8s (single-node cluster via Kubespray)
+## Kubernetes
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  storageClassName: do-block-storage
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/lib/mysql"
+EOF
+```
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  storageClassName: do-block-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+EOF
+```
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wordpress-pv
+spec:
+  storageClassName: do-block-storage
+  capacity: 
+    storage: 15Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/www"
+EOF
+```
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-pv-claim
+spec:
+  storageClassName: do-block-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 15Gi
+EOF
+```
+
+
+
+## Demo
 
