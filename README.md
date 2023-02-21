@@ -1,5 +1,7 @@
 # GL: Final Task
 
+## Task
+
 Terraform:	
 - create VPC in GCP/Azure						
 - create instance with External IP						
@@ -64,6 +66,12 @@ storage-component.googleapis.com     Cloud Storage
 storage.googleapis.com               Cloud Storage API
 ```
 
+Clone project repo to your host machine:
+```
+git clone https://github.com/serhieiev/gl-final.git 
+cd gl-final
+```
+
 To deploy `gcp` module, copy the `terraform.tfvars.example` using the following command:
 ```
 cp terraform.tfvars.example terraform.tfvars
@@ -87,6 +95,65 @@ Execute the actions proposed in a Terraform plan
 ```
 terraform apply "gl-final"
 ```
+
+## Ansible
+
+Clone kubespray release repository to your host machine:
+```
+git clone https://github.com/kubernetes-sigs/kubespray.git 
+cd kubespray
+git checkout release-2.20
+```
+Install kubespray Python dependencies:
+```
+sudo pip3 install -r requirements.txt
+```
+
+Copy and edit `inventory.ini` file 
+```
+cp -rfp inventory/sample inventory/mycluster
+```
+```
+nano inventory/mycluster/inventory.ini
+```
+```
+[all]
+node1 ansible_host=VM_PUBLIC_IP
+[kube_control_plane] node1
+[etcd] node1
+[kube_node] node1
+[calico_rr]
+[k8s_cluster:children] kube_control_plane kube_node
+calico_rr
+```
+Turn on MetalLB:
+```
+nano inventory\mycluster\group_vars\k8s_cluster\addons.yml 
+```
+```
+...
+metallb_enabled: true
+metallb_speaker_enabled: true
+metallb_avoid_buggy_ips: true metallb_ip_range:
+- "VM_PRIVATE_IP/24"
+...
+```
+Configure strict ARP:
+```
+nano inventory\mycluster\group_vars\k8s_cluster\k8s-cluster.yml
+```
+```
+...
+kube_proxy_strict_arp: true
+...
+
+```
+Run the kubespray playbook after adjusting `--user` and `--key-file` to reflect your specific configuration:
+```
+ansible-playbook -i inventory/mycluster/inventory.ini --become --user=serhieiev --become-user=root cluster.yml --key-file "~/.ssh/gcp_key"
+```
+
+
 
 ## Kubernetes
 
