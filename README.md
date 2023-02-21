@@ -98,6 +98,8 @@ terraform apply "gl-final"
 
 ## Ansible
 
+## deploy k8s (single-node cluster via kubespray)
+
 Clone kubespray release repository to your host machine:
 ```
 git clone https://github.com/kubernetes-sigs/kubespray.git 
