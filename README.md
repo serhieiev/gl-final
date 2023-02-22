@@ -242,7 +242,7 @@ spec:
       storage: 15Gi
 EOF
 ```
-Using any text editor of your choice, create a `kustomization.yaml` file and fill in a password of your preference, ensuring it has high security:
+Using any text editor of your choice, create a `kustomization.yaml` file and fill in a password of your preference, ensuring it has high security, and other MYSQL related data:
 ```
 secretGenerator:
 - name: mysql-password
