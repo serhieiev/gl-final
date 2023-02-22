@@ -1,6 +1,6 @@
 ---
 - name: Create kube directory, install Helm, and add Helm repositories
-  hosts: 34.88.241.180
+  hosts: all
   become: yes
   roles:
     - helm_setup
