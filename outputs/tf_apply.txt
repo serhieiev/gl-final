@@ -1,0 +1,114 @@
+~/DevOps/GL/gl-final     main    terraform apply "gl-final"                                                                                          
+module.gcp.google_compute_network.gl-vpc: Creating...
+module.gcp.google_compute_address.static: Creating...
+module.gcp.google_compute_network.private_network: Creating...
+module.gcp.google_compute_network.gl-vpc: Still creating... [10s elapsed]
+module.gcp.google_compute_network.private_network: Still creating... [10s elapsed]
+module.gcp.google_compute_address.static: Still creating... [10s elapsed]
+module.gcp.google_compute_address.static: Creation complete after 11s [id=projects/gl-tf-server/regions/europe-north1/addresses/ipv4-address]
+module.gcp.google_compute_network.gl-vpc: Still creating... [20s elapsed]
+module.gcp.google_compute_network.private_network: Still creating... [20s elapsed]
+module.gcp.google_compute_network.private_network: Still creating... [30s elapsed]
+module.gcp.google_compute_network.gl-vpc: Still creating... [30s elapsed]
+module.gcp.google_compute_network.gl-vpc: Still creating... [40s elapsed]
+module.gcp.google_compute_network.private_network: Still creating... [40s elapsed]
+module.gcp.google_compute_network.gl-vpc: Creation complete after 43s [id=projects/gl-tf-server/global/networks/gl-vpc]
+module.gcp.google_compute_firewall.ssh-server: Creating...
+module.gcp.google_compute_firewall.rules: Creating...
+module.gcp.google_compute_instance.vm_instance: Creating...
+module.gcp.google_compute_network.private_network: Creation complete after 44s [id=projects/gl-tf-server/global/networks/db-private-network]
+module.gcp.google_compute_global_address.private_ip_block: Creating...
+module.gcp.google_compute_firewall.rules: Still creating... [10s elapsed]
+module.gcp.google_compute_firewall.ssh-server: Still creating... [10s elapsed]
+module.gcp.google_compute_instance.vm_instance: Still creating... [10s elapsed]
+module.gcp.google_compute_global_address.private_ip_block: Still creating... [10s elapsed]
+module.gcp.google_compute_firewall.rules: Creation complete after 12s [id=projects/gl-tf-server/global/firewalls/default-allow-http-terraform]
+module.gcp.google_compute_firewall.ssh-server: Creation complete after 12s [id=projects/gl-tf-server/global/firewalls/default-allow-ssh-terraform]
+module.gcp.google_compute_global_address.private_ip_block: Creation complete after 12s [id=projects/gl-tf-server/global/addresses/private-ip-block]
+module.gcp.google_service_networking_connection.private_vpc_connection: Creating...
+module.gcp.google_compute_instance.vm_instance: Creation complete after 13s [id=projects/gl-tf-server/zones/europe-north1-a/instances/k8s-gcp]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [10s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [20s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [30s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [40s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [50s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [1m0s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Still creating... [1m10s elapsed]
+module.gcp.google_service_networking_connection.private_vpc_connection: Creation complete after 1m15s [id=projects%2Fgl-tf-server%2Fglobal%2Fnetworks%2Fdb-private-network:servicenetworking.googleapis.com]
+module.gcp.google_sql_database_instance.mysqldb: Creating...
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [10s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [20s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [30s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [40s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [50s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [1m0s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [1m10s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [1m20s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [1m30s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [1m40s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [1m50s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [2m0s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [2m10s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [2m20s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [2m30s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [2m40s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [2m50s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [3m0s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [3m10s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [3m20s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [3m30s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [3m40s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Still creating... [3m50s elapsed]
+module.gcp.google_sql_database_instance.mysqldb: Creation complete after 3m54s [id=mysql]
+module.gcp.google_sql_database.database: Creating...
+module.gcp.google_sql_user.users: Creating...
+module.gcp.google_sql_database.database: Creation complete after 1s [id=projects/gl-tf-server/instances/mysql/databases/wpdb]
+module.gcp.google_sql_user.users: Creation complete after 3s [id=root/%/mysql]
+null_resource.vm_instance: Creating...
+null_resource.vm_instance: Provisioning with 'local-exec'...
+null_resource.vm_instance (local-exec): Executing: ["/bin/sh" "-c" "      exit_test () {\n        RED='\\033[0;31m' # Red Text\n        GREEN='\\033[0;32m' # Green Text\n        BLUE='\\033[0;34m' # Blue Text\n        NC='\\033[0m' # No Color\n        if [ $? -eq 0 ]; then\n          printf \"\\n $GREEN Playbook Succeeded $NC \\n\"\n        else\n          printf \"\\n $RED Failed Playbook $NC \\n\" >&2\n          exit 1\n        fi\n      }\n      ansible-playbook  -i 34.88.241.180, --become --user=serhieiev --become-user=root harden.yaml; exit_test \n"]
+
+null_resource.vm_instance (local-exec): PLAY [Harden Ubuntu VM] ********************************************************
+
+null_resource.vm_instance (local-exec): TASK [Gathering Facts] *********************************************************
+null_resource.vm_instance (local-exec): ok: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Run 'apt update' proactively to avoid the need for future 'apt' invocations to do it] ***
+null_resource.vm_instance: Still creating... [10s elapsed]
+null_resource.vm_instance (local-exec): changed: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Disable root login via password] *****************************
+null_resource.vm_instance (local-exec): changed: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Disable root login via SSH] **********************************
+null_resource.vm_instance: Still creating... [20s elapsed]
+null_resource.vm_instance (local-exec): changed: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Disable password authentication via SSH] *********************
+null_resource.vm_instance (local-exec): ok: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Enable SSH key-based authentication] *************************
+null_resource.vm_instance (local-exec): changed: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Set up unattended upgrades] **********************************
+null_resource.vm_instance (local-exec): ok: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): TASK [hardening : Configure unattended upgrades] *******************************
+null_resource.vm_instance (local-exec): changed: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): RUNNING HANDLER [hardening : restart ssh] **************************************
+null_resource.vm_instance (local-exec): changed: [34.88.241.180]
+
+null_resource.vm_instance (local-exec): PLAY RECAP *********************************************************************
+null_resource.vm_instance (local-exec): 34.88.241.180              : ok=9    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+null_resource.vm_instance (local-exec):   Playbook Succeeded 
+null_resource.vm_instance: Creation complete after 27s [id=8241030061645789215]
+
+Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+gcp_ip = "34.88.241.180"
+gcp_ssh_connection_string = "ssh -i ~/.ssh/gcp_key serhieiev@34.88.241.180"

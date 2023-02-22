@@ -155,10 +155,11 @@ Run the kubespray playbook after adjusting `--user` and `--key-file` to reflect 
 ansible-playbook -i inventory/mycluster/inventory.ini --become --user=serhieiev --become-user=root cluster.yml --key-file "~/.ssh/gcp_key"
 ```
 
-
+Check the complete output of the execution [kubespray.txt](https://github.com/serhieiev/gl-final/blob/main/outputs/kubespray.txt)
 
 ## Kubernetes
 
+Apply a `PersistentVolume` for the MySQL database:
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -175,7 +176,7 @@ spec:
     path: "/var/lib/mysql"
 EOF
 ```
-
+Then, apply a `PersistentVolumeClaim`for the MySQL database:
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -191,7 +192,7 @@ spec:
       storage: 10Gi
 EOF
 ```
-
+Apply a `PersistentVolume` for the WordPress:
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -208,7 +209,7 @@ spec:
     path: "/var/www"
 EOF
 ```
-
+Then, apply a `PersistentVolumeClaim`for the WordPress:
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -224,7 +225,272 @@ spec:
       storage: 15Gi
 EOF
 ```
+Using any text editor of your choice, create a `kustomization.yaml` file and fill in a password of your preference, ensuring it has high security:
+```
+secretGenerator:
+- name: mysql-password
+  literals:
+  - password=MYSQL_PASSWORD
+- name: mysql-user
+  literals:
+  - username=MYSQL_USER
+- name: mysql-user-password
+  literals:
+  - passworduser=MYSQL_USER_PASSWORD
+- name: mysql-database
+  literals:
+  - database=MYSQL_DATABASE
+```
+After that execute:
+```
+kubectl apply -k .
+```
+Apply MySQL service with the secret we have created before:
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql-wp
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-wp
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:latest
+        name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: MYSQL_PASSWORD
+              key: password
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: MYSQL_USER
+              key: username
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: USER
+              key: passworduser
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: USER_PASSWORD
+              key: database
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+EOF
+```
 
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: web
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: web
+    spec:
+      containers:
+      - image: wordpress:php8.1-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: mysql-wp:3306
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user-password-9m7k5b4k2m
+              key: passworduser
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user-4t5mcf8dkm
+              key: username
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mysql-database-4f74mgddt5
+              key: database
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pv-claim
+EOF
+```
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: web
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: web
+    spec:
+      containers:
+      - image: wordpress:php8.1-apache
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: mysql-wp:3306
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: MYSQL_USER_PASSWORD
+              key: passworduser
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: MYSQL_USER
+              key: username
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: MYSQL_DATABASE
+              key: database
+        ports:
+        - containerPort: 80
+          name: wordpress
+        volumeMounts:
+        - name: persistent-storage
+          mountPath: /var/www/html
+      volumes:
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pv-claim
+EOF
+```
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata: 
+  name: wp-prod-issuer
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: youremail@example.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+EOF
+```
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wordpress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "wp-prod-issuer"
+spec:
+  rules:
+  - host: serhieiev.site
+    http:
+     paths:
+     - path: "/"
+       pathType: Prefix
+       backend:
+         service:
+           name: wordpress
+           port:
+             number: 80
+  tls:
+  - hosts:
+    - serhieiev.site
+    secretName: wordpress-tls
+EOF
+```
 
 
 ## Demo

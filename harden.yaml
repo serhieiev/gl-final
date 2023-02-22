@@ -1,0 +1,5 @@
+---
+- name: Harden Ubuntu VM
+  hosts: all
+  roles:
+    - hardening
