@@ -99,6 +99,7 @@ terraform apply "gl-final"
 Check the complete output of the execution [tf_apply.txt](https://github.com/serhieiev/gl-final/blob/main/outputs/tf_apply.txt)
 
 Example of successful execution visible on screnshot below:
+![tf_apply_output](https://user-images.githubusercontent.com/12089303/220590316-655fc87f-2ea9-4759-80a3-148b8e7c084c.png)
 
 ## Ansible
 
@@ -510,6 +511,7 @@ EOF
 
 Make sure that k8s resources are intact:
 
+![kubectl_verify_deployment](https://user-images.githubusercontent.com/12089303/220590138-fbf46eb8-2156-4699-9c95-421c23da4f66.png)
 
 
 ## Demo
@@ -517,7 +519,7 @@ Make sure that k8s resources are intact:
 The WordPress site is reachable via a URL and can be set up using a wizard.
 ![WordPress_installation](https://user-images.githubusercontent.com/12089303/220213484-cf8b7018-4f61-4242-8f7a-f23c6b3ad416.png)
 
-Once setup is complete, enjoy the of WordPress running in k8s spinned up on 100:money_with_wings: GCP VM instance :smile:
+Once setup is complete, enjoy the power of WordPress running in k8s that spinned up on 100:money_with_wings: GCP VM instance :smile:
 
 ![Hello_GL_DevOps_Basecamp](https://user-images.githubusercontent.com/12089303/220213493-e18e9d01-ece2-4623-8428-0bb0fae59e40.png)
 
