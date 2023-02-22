@@ -461,7 +461,7 @@ spec:
           claimName: wordpress-pv-claim
 EOF
 ```
-
+Apply an SSL Letsencrypt `ClusterIssuer` and don't forget to put your `email`:  
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: cert-manager.io/v1
@@ -480,7 +480,7 @@ spec:
             class: nginx
 EOF
 ```
-
+Apply `Ingress` replacing `host` value with your domain:
 ```
 cat <<EOF | kubectl apply -f -
 apiVersion: networking.k8s.io/v1

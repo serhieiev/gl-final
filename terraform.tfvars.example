@@ -1,0 +1,19 @@
+# GCP Project Specific Variables
+gcp_project  = "gl-tf-server"
+gcp_region   = "europe-north1"
+gcp_zone     = "europe-north1-a"
+gcp_key_file = "~/Downloads/gl-tf-server-acad3cc1172b.json"
+
+# VM Instance Specific Variables
+vm_type      = "e2-custom-4-8192"
+disk_image   = "ubuntu-os-cloud/ubuntu-2004-focal-v20230213"
+disk_size    = 50
+
+# Common Variables
+ssh_user          = "serhieiev"
+ssh_pub_key_file  = "~/.ssh/gcp_key.pub"
+ssh_priv_key_file = "~/.ssh/gcp_key"
+
+# Cloud SQL Instance Specific Variables
+db_username = "root"
+db_password = "StrongPass"
