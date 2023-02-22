@@ -37,7 +37,7 @@ spec:
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: MYSQL_PASSWORD
+              name: MYSQL_USER_PASSWORD
               key: passworduser
         - name: WORDPRESS_DB_USER
           valueFrom:
