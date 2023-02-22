@@ -1,0 +1,43 @@
+---
+- name: Create kube directory
+  file:
+    path: "{{ ansible_env.HOME }}/.kube"
+    state: directory
+    mode: '0755'
+
+- name: Copy admin.conf to config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "{{ ansible_env.HOME }}/.kube/config"
+    remote_src: yes
+
+- name: Set permissions on config
+  file:
+    path: "{{ ansible_env.HOME }}/.kube/config"
+    mode: '0777'
+
+- name: Download Helm installer script
+  get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: "{{ ansible_env.HOME }}/get-helm.sh"
+    mode: '0755'
+
+- name: Install Helm
+  command: "{{ ansible_env.HOME }}/get-helm.sh"
+  args:
+    chdir: "{{ ansible_env.HOME }}"
+
+- name: Add nginx-stable Helm repository
+  command: helm repo add nginx-stable https://helm.nginx.com/stable
+
+- name: Add jetstack Helm repository
+  command: helm repo add jetstack https://charts.jetstack.io
+
+- name: Update Helm repositories
+  command: helm repo update
+
+- name: Install nginx-ingress chart
+  command: helm install nginx-ingress nginx-stable/nginx-ingress
+
+- name: Install cert-manager chart
+  command: helm install cert-manager jetstack/cert-manager --set installCRDs=true

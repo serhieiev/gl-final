@@ -1,0 +1,27 @@
+// Automatically upgrade packages from these (origin,archive) pairs
+Unattended-Upgrade::Allowed-Origins {
+    "Ubuntu:focal";
+    "Ubuntu-security:focal-security";
+};
+
+// List of packages to not update
+Unattended-Upgrade::Package-Blacklist {
+    // Examples of packages that might be blacklisted
+    "mysql-server";
+    "apache2";
+    "nginx";
+    "php";
+};
+
+// Do not allow the upgrade of packages from a development release.
+Unattended-Upgrade::DevRelease "false";
+
+// Send email notifications to this address for any unattended upgrades
+Unattended-Upgrade::Mail "root";
+
+// Only apply security updates by default
+Unattended-Upgrade::MinimalSteps "true";
+
+// Automatically reboot if necessary
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::Automatic-Reboot-Time "02:00";
