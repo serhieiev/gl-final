@@ -38,7 +38,7 @@ The following software has been installed on the host machine:
 Ensure that you have an identical list of enabled services on Google Cloud Platform (GCP):
 ```
 gcloud services list --enabled --project gl-tf-server
-                                                            1 ↵ 
+                                                         
 NAME                                 TITLE
 bigquery.googleapis.com              BigQuery API
 bigquerymigration.googleapis.com     BigQuery Migration API
