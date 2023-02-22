@@ -96,9 +96,19 @@ Execute the actions proposed in a Terraform plan
 terraform apply "gl-final"
 ```
 
+Check the complete output of the execution [tf_apply.txt](https://github.com/serhieiev/gl-final/blob/main/outputs/tf_apply.txt)
+
+Example of successful execution visible on screnshot below:
+
 ## Ansible
 
-## deploy k8s (single-node cluster via kubespray)
+### perform basic hardening (keyless-only ssh, unattended upgrade, firewall)	
+
+The hardening of an Ubuntu 20.04 system is described in the `hardening` role and executed during a `terraform apply` operation using the `null_resource` and `local-exec` provisioners.
+
+Check the complete output of the execution [tf_apply.txt](https://github.com/serhieiev/gl-final/blob/main/outputs/tf_apply.txt)
+
+### deploy k8s (single-node cluster via kubespray)
 
 Clone kubespray release repository to your host machine:
 ```
@@ -158,6 +168,12 @@ ansible-playbook -i inventory/mycluster/inventory.ini --become --user=serhieiev 
 Check the complete output of the execution [kubespray.txt](https://github.com/serhieiev/gl-final/blob/main/outputs/kubespray.txt)
 
 ## Kubernetes
+
+The routine tasks such as creating a `kube` directory, installing Helm, and adding Helm repositories are described in the `hardening` role.
+
+Check the complete output of the execution [helm_install.txt](https://github.com/serhieiev/gl-final/blob/main/outputs/helm_install.txt)
+
+After that, we can proceed with setting up MYSQL and WordPress in our k8s environment:
 
 Apply a `PersistentVolume` for the MySQL database:
 ```
@@ -492,11 +508,16 @@ spec:
 EOF
 ```
 
+Make sure that k8s resources are intact:
+
+
 
 ## Demo
 
+The WordPress site is reachable via a URL and can be set up using a wizard.
 ![WordPress_installation](https://user-images.githubusercontent.com/12089303/220213484-cf8b7018-4f61-4242-8f7a-f23c6b3ad416.png)
 
+Once setup is complete, enjoy the of WordPress running in k8s spinned up on 100:money_with_wings: GCP VM instance :smile:
 
 ![Hello_GL_DevOps_Basecamp](https://user-images.githubusercontent.com/12089303/220213493-e18e9d01-ece2-4623-8428-0bb0fae59e40.png)
 
